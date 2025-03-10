@@ -159,7 +159,6 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
             currentY = currentY + ownerBoxHeight + spacing
         end
     else
-        -- Wenn die Tür gruppen- oder teambasiert ist
         if doorGroup then
             drawTextBox(mainX, currentY, mainW, 60, {
                 { text = "Besitzer:", font = "DGSPriceFont", color = Color(220, 220, 220) },
