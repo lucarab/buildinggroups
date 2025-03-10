@@ -1,5 +1,13 @@
 if not CLIENT or not DarkRP then return end
 
+local cachedPlayer = nil
+local function GetCachedPlayer()
+    if not IsValid(cachedPlayer) then
+        cachedPlayer = LocalPlayer()
+    end
+    return cachedPlayer
+end
+
 -------------------------------------------------------------------------------
 -- Schriftdefinitionen
 -------------------------------------------------------------------------------
@@ -22,32 +30,45 @@ surface.CreateFont("DGSTextFont", {
 })
 
 -------------------------------------------------------------------------------
--- Clientseitiger Gebäude-Cache & Netzwerk
+-- Gebäudedaten, Cache und Lookup-Tabelle
 -------------------------------------------------------------------------------
 local ClientBuildings = {}
+local CachedBuildingDoorEntities = {}
+local DoorIDToBuilding = {}
 
 net.Receive("DoorGroupSystem_Buildings", function()
     local data = net.ReadTable()
     ClientBuildings = data.buildings or {}
-end)
 
--------------------------------------------------------------------------------
--- Hilfsfunktionen
--------------------------------------------------------------------------------
-local function GetBuildingNameByDoor(doorEnt)
-    if not IsValid(doorEnt) then return end
-    local doorID = doorEnt:MapCreationID()
     for bName, building in pairs(ClientBuildings) do
-        for _, storedID in ipairs(building.doors or {}) do
-            if storedID == doorID then
-                return bName
+        CachedBuildingDoorEntities[bName] = {}
+        for _, doorID in ipairs(building.doors or {}) do
+            DoorIDToBuilding[doorID] = bName
+            local doorEnt = ents.GetMapCreatedEntity(doorID)
+            if IsValid(doorEnt) and doorEnt:isDoor() then
+                table.insert(CachedBuildingDoorEntities[bName], doorEnt)
             end
         end
     end
+end)
+
+local function GetBuildingNameByDoor(doorEnt)
+    if not IsValid(doorEnt) then return nil end
+    return DoorIDToBuilding[doorEnt:MapCreationID()]
 end
 
-local function GetBuildingData(buildingName)
-    return buildingName and ClientBuildings[buildingName] or nil
+-------------------------------------------------------------------------------
+-- Zeichnen eines Textfeldes
+-------------------------------------------------------------------------------
+local function drawTextBox(x, y, w, h, lines)
+    local bgColor = Color(20, 20, 20, 220)
+    draw.RoundedBox(8, x, y, w, h, bgColor)
+    local centerX = x + w / 2
+    local offsetY = 20
+    for _, line in ipairs(lines) do
+        draw.SimpleText(line.text, line.font, centerX, y + offsetY, line.color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        offsetY = offsetY + (line.spacing or 20)
+    end
 end
 
 -------------------------------------------------------------------------------
@@ -56,60 +77,44 @@ end
 hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
     if not (IsValid(ent) and ent:isDoor()) then return end
 
-    local ply = LocalPlayer()
+    local ply = GetCachedPlayer()
     if ply:InVehicle() and not ply:GetAllowWeaponsInVehicle() then return end
 
     local bName = GetBuildingNameByDoor(ent)
-    local blocked       = ent:getKeysNonOwnable()
-    local doorGroup     = ent:getKeysDoorGroup()
-    local doorTeams     = ent:getKeysDoorTeams()
-    local coOwners      = ent:getKeysCoOwners() or {}
-    local allowedCoOwn  = ent:getKeysAllowedToOwn() or {}
-    local doorOwner     = ent:getDoorOwner()
+    local doorGroup    = ent:getKeysDoorGroup()
+    local doorTeams    = ent:getKeysDoorTeams()
+    local coOwners     = ent:getKeysCoOwners() or {}
+    local allowedCoOwn = ent:getKeysAllowedToOwn() or {}
+    local doorOwner    = ent:getDoorOwner()
     local isPlayerOwned = ent:isKeysOwned() or next(coOwners) ~= nil
-    local isOwned       = isPlayerOwned or doorGroup or doorTeams
+    local isOwned      = isPlayerOwned or doorGroup or doorTeams
 
     local mainW   = 300
     local mainX   = (ScrW() - mainW) / 2
     local mainY   = (ScrH() / 2) - 50
-    local bgColor = Color(20, 20, 20, 220)
     local spacing = 10
 
-    local function drawTextBox(x, y, w, h, lines)
-        draw.RoundedBox(8, x, y, w, h, bgColor)
-        local centerX = x + w / 2
-        local offsetY = 20
-        for _, line in ipairs(lines) do
-            draw.SimpleText(line.text, line.font, centerX, y + offsetY, line.color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            offsetY = offsetY + (line.spacing or 20)
-        end
-    end
-
     local currentY = mainY
-    local bData    = GetBuildingData(bName)
-
+    local bData    = ClientBuildings[bName]
     local price    = bData and DoorGroupSystem:CalculateBuildingPrice(bData) or 0
-    local doorCount = bData and (#(bData.doors or {}) > 0 and #bData.doors or 1) or 1
+    local doorCount = bData and ((#(bData.doors or {}) > 0 and #bData.doors) or 1) or 1
 
     if not (doorGroup or doorTeams) then
         if not bName then return end
 
-        local doorTitle = ent:getKeysTitle()
+        local doorTitle   = ent:getKeysTitle()
         local displayText = doorTitle or bName
-        local maxWidth = mainW - 20
+        local maxWidth    = mainW - 20
 
         surface.SetFont("DGSTitleFont")
         local textWidth = surface.GetTextSize(displayText)
-
         if textWidth > maxWidth then
             local ellipsis = "..."
             local ellipsisWidth = surface.GetTextSize(ellipsis)
             local trimmedText = displayText
-
             while surface.GetTextSize(trimmedText) + ellipsisWidth > maxWidth and #trimmedText > 0 do
                 trimmedText = string.sub(trimmedText, 1, #trimmedText - 1)
             end
-
             displayText = trimmedText .. ellipsis
         end
 
@@ -124,12 +129,10 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
                 { text = "Anzahl der Türen: " .. doorCount, font = "DGSPriceFont", color = Color(70, 130, 180) }
             })
             currentY = currentY + 60 + spacing
-
             drawTextBox(mainX, currentY, mainW, 40, {
                 { text = "Drücke (F2), um dieses Gebäude zu kaufen", font = "DGSTextFont", color = Color(220, 220, 220) }
             })
             currentY = currentY + 40 + spacing
-
         elseif isPlayerOwned then
             local ownerLines = {
                 { text = "Besitzer:", font = "DGSPriceFont", color = Color(220, 220, 220) }
@@ -143,7 +146,6 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
                     table.insert(ownerLines, { text = coPly:Nick(), font = "DGSTextFont", color = Color(220, 220, 220) })
                 end
             end
-
             if next(allowedCoOwn) then
                 table.insert(ownerLines, { text = "Erlaubte Mitbesitzer:", font = "DGSPriceFont", color = Color(220, 220, 220) })
                 for steamID in pairs(allowedCoOwn) do
@@ -153,7 +155,6 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
                     end
                 end
             end
-
             local ownerBoxHeight = (#ownerLines * 20) + 20
             drawTextBox(mainX, currentY, mainW, ownerBoxHeight, ownerLines)
             currentY = currentY + ownerBoxHeight + spacing
@@ -192,7 +193,7 @@ end)
 -------------------------------------------------------------------------------
 local MAX_DISTANCE = 200
 hook.Add("PreDrawHalos", "DoorGroupSystem_HighlightUnownedDoors", function()
-    local ply = LocalPlayer()
+    local ply = GetCachedPlayer()
     if not IsValid(ply) then return end
 
     local trace = ply:GetEyeTrace()
@@ -206,18 +207,8 @@ hook.Add("PreDrawHalos", "DoorGroupSystem_HighlightUnownedDoors", function()
     local bName = GetBuildingNameByDoor(door)
     if not bName then return end
 
-    local bData = GetBuildingData(bName)
-    if not bData then return end
-
-    local doorEnts = {}
-    for _, doorID in ipairs(bData.doors or {}) do
-        local dEnt = ents.GetMapCreatedEntity(doorID)
-        if IsValid(dEnt) and dEnt:isDoor() then
-            table.insert(doorEnts, dEnt)
-        end
-    end
-
-    if #doorEnts > 0 then
+    local doorEnts = CachedBuildingDoorEntities[bName]
+    if doorEnts and #doorEnts > 0 then
         halo.Add(doorEnts, Color(255, 0, 0), 2, 2, 1, false, true)
     end
 end)
