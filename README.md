@@ -2,19 +2,6 @@
 
 https://youtu.be/CqJbftWCQlw
 
-## Inhaltsverzeichnis
-
-1. [Überblick](#überblick)  
-2. [Features](#features)  
-3. [Verzeichnisstruktur](#verzeichnisstruktur)  
-4. [Admin-Befehle](#admin-befehle)  
-
-## Überblick
-
-Mit dem DoorGroupSystem wird das Kaufen und Verkaufen ganzer Gebäude in DarkRP einfacher und übersichtlicher. Anstelle einzelner Türen werden nun Gruppen von Türen (in einem Gebäude) zusammengefasst. 
-
-Das System erlaubt es Spielern, komplette Gebäude mit mehreren Türen auf einmal zu erwerben, anstatt jede Tür einzeln zu kaufen. Zudem bietet es eine einheitliche Verwaltung des Gebäudebesitzes, sodass keine einzelnen Türen innerhalb eines Gebäudes vergessen oder versehentlich verkauft werden können. Der Hauptbesitzer eines Gebäudes kann Mitbesitzer festlegen, die ebenfalls Zugang zu allen Türen des Gebäudes haben. Die Verwaltung der Co-Owner erfolgt wie gehabt einfach über das DarkRP-Menü oder Chat-Befehle.
-
 ## Features
 
 - **Gebäude in Gruppen organisieren**: Fasse mehrere Türen zu einem "Building" zusammen.  
@@ -28,7 +15,6 @@ Das System erlaubt es Spielern, komplette Gebäude mit mehreren Türen auf einma
 - **Unterstützung für DarkRP Permissions**: Admins haben die volle Kontrolle über das System und können Änderungen über Chat-Befehle verwalten.  
 - **Dynamische Preisberechnung**: Preise passen sich an die Anzahl der Türen im Gebäude an, um faire Kaufpreise zu gewährleisten.  
 - **Automatische Rückerstattung bei Verkauf**: Spieler erhalten einen anteiligen Betrag zurück, wenn sie ein Gebäude verkaufen.  
-- **Flexibel erweiterbar**: Das System ist modular aufgebaut und kann leicht angepasst oder erweitert werden.  
 
 ## Verzeichnisstruktur
 
