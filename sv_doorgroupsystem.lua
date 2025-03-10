@@ -8,8 +8,8 @@ if not file.IsDir("doorgroupsystem", "DATA") then
 end
 
 DoorGroupSystem = DoorGroupSystem or {}
-DoorGroupSystem.DataFile             = "doorgroupsystem/doorgroups_" .. game.GetMap() .. ".json"
-DoorGroupSystem.Buildings            = DoorGroupSystem.Buildings or {}
+DoorGroupSystem.DataFile = "doorgroupsystem/doorgroups_" .. game.GetMap() .. ".json"
+DoorGroupSystem.Buildings = DoorGroupSystem.Buildings or {}
 DoorGroupSystem.DoorToBuildingMapping = {}
 
 util.AddNetworkString("DoorGroupSystem_Buildings")
@@ -98,9 +98,9 @@ function DoorGroupSystem:CreateBuilding(buildingName, price, doorFactor)
     end
 
     self.Buildings[buildingName] = {
-        price      = price,
+        price = price,
         doorFactor = doorFactor or self.DoorFactor,
-        doors      = {}
+        doors = {}
     }
     self:SaveBuildings()
     return true, ("Gebäude '%s' erstellt mit Grundpreis $%d und Türpreis $%d."):format(
@@ -145,7 +145,7 @@ end
 function DoorGroupSystem:SendBuildingsToClient(ply)
     net.Start("DoorGroupSystem_Buildings")
     net.WriteTable({
-        buildings  = self.Buildings,
+        buildings = self.Buildings,
         doorFactor = self.DoorFactor
     })
     net.Send(ply)
@@ -179,11 +179,11 @@ local function parseArgs(args)
         local closingQuote = args:find(firstChar, 2)
         if not closingQuote then return nil, nil, "Ungültige Syntax: Fehlendes schließendes Anführungszeichen." end
         buildingName = args:sub(2, closingQuote - 1)
-        remainder    = string.Trim(args:sub(closingQuote + 1))
+        remainder = string.Trim(args:sub(closingQuote + 1))
     else
         local parts = string.Explode(" ", args)
         buildingName = parts[1] or ""
-        remainder    = args:sub(#buildingName + 1)
+        remainder = args:sub(#buildingName + 1)
     end
 
     return buildingName, remainder
@@ -199,7 +199,7 @@ DarkRP.defineChatCommand("createbuilding", function(ply, args)
     end
 
     local priceStr, doorFactorStr = string.match(remainder, "^(%S+)%s+(%S+)")
-    local price      = tonumber(priceStr)
+    local price = tonumber(priceStr)
     local doorFactor = tonumber(doorFactorStr)
 
     if not (price and doorFactor) then
@@ -225,7 +225,7 @@ DarkRP.defineChatCommand("setbuildingprice", function(ply, args)
     end
 
     local priceStr, doorFactorStr = string.match(remainder, "^(%S+)%s+(%S+)")
-    local newPrice      = tonumber(priceStr)
+    local newPrice = tonumber(priceStr)
     local newDoorFactor = tonumber(doorFactorStr)
 
     if not (newPrice and newDoorFactor) then
@@ -238,7 +238,7 @@ DarkRP.defineChatCommand("setbuildingprice", function(ply, args)
         return ""
     end
 
-    DoorGroupSystem.Buildings[buildingName].price      = newPrice
+    DoorGroupSystem.Buildings[buildingName].price = newPrice
     DoorGroupSystem.Buildings[buildingName].doorFactor = newDoorFactor
     DoorGroupSystem:SaveBuildings()
     DarkRP.notify(ply, 0, 4, ("Grundpreis von '%s' wurde auf $%d gesetzt und Türpreis auf $%d."):format(buildingName, newPrice, newDoorFactor))
@@ -482,7 +482,7 @@ hook.Add("playerSellDoor", "DoorGroupSystem_PlayerSellDoor", function(ply, ent)
     if not buildingData then return end
 
     local buildingPrice = DoorGroupSystem:CalculateBuildingPrice(buildingData)
-    local refund        = math.floor(buildingPrice * 0.5)
+    local refund = math.floor(buildingPrice * 0.5)
 
     ply:addMoney(refund)
     DarkRP.notify(ply, 2, 4, ("Du hast '%s' verkauft und erhälst $%d."):format(buildingName, refund))
@@ -510,7 +510,7 @@ function DoorGroupSystem:SellAllBuildingsForPlayer(ply)
             self:SellBuilding(ply, doorEnt)
         end)
         local buildingPrice = self:CalculateBuildingPrice(buildingData)
-        local refund        = math.floor(buildingPrice * 0.5)
+        local refund = math.floor(buildingPrice * 0.5)
 
         ply:addMoney(refund)
         DarkRP.notify(ply, 2, 4, ("Du hast '%s' verkauft und erhälst $%d."):format(bName, refund))

@@ -9,8 +9,8 @@ DoorGroupSystem.MaxOwnBuildings   = 3     -- Maximale Gebäude, die ein Spieler 
 -------------------------------------------------------------------------------
 function DoorGroupSystem:CalculateBuildingPrice(buildingData)
     if not buildingData then return 0 end
-    local basePrice  = buildingData.price or 0
+    local basePrice = buildingData.price or 0
     local doorFactor = buildingData.doorFactor or self.DoorFactor
-    local doorCount  = #(buildingData.doors or {})
+    local doorCount = #(buildingData.doors or {})
     return basePrice + (doorCount * doorFactor)
 end
