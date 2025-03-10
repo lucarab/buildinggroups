@@ -533,16 +533,12 @@ end)
 hook.Add("canPropertyTax", "DoorGroupSystem_CanPropertyTax", function(ply, tax)
     local totalValue = 0
     for buildingName, buildingData in pairs(DoorGroupSystem.Buildings) do
-        local owned = false
         for _, doorID in ipairs(buildingData.doors or {}) do
             local doorEnt = ents.GetMapCreatedEntity(doorID)
             if IsValid(doorEnt) and doorEnt:isMasterOwner(ply) then
-                owned = true
+                totalValue = totalValue + DoorGroupSystem:CalculateBuildingPrice(buildingData)
                 break
             end
-        end
-        if owned then
-            totalValue = totalValue + DoorGroupSystem:CalculateBuildingPrice(buildingData)
         end
     end
     if totalValue <= 0 then
