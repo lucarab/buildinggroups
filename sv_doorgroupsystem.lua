@@ -565,7 +565,6 @@ hook.Add("PlayerDisconnected", "DoorGroupSystem_PlayerDisconnected", function(pl
                 if fallbackSteamID then
                     local fallback = Player(fallbackSteamID)
                     if IsValid(fallback) then
-
                         local currentBuildingCount = DoorGroupSystem:CountBuildingsOwnedBy(fallback) or 0
                         local buildingName = DoorGroupSystem:GetBuildingFromDoor(doorEnt) or "Unbekanntes Gebäude"
                         if currentBuildingCount < DoorGroupSystem.MaxOwnBuildings then
