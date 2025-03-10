@@ -1,8 +1,6 @@
 ## DEMO Video
 
-https://youtu.be/CqJbftWCQlw?si=8y8qXbllG81oZGm2
-
----
+https://youtu.be/CqJbftWCQlw
 
 ## Inhaltsverzeichnis
 
