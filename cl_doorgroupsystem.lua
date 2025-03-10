@@ -83,7 +83,7 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
             draw.SimpleText(line.text, line.font, centerX, y + offsetY, line.color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             offsetY = offsetY + (line.spacing or 20)
         end
-    end	
+    end
 
     local currentY = mainY
     local bData    = GetBuildingData(bName)

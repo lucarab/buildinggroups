@@ -567,14 +567,14 @@ hook.Add("PlayerDisconnected", "DoorGroupSystem_PlayerDisconnected", function(pl
                     if IsValid(fallback) then
 
                         local currentBuildingCount = DoorGroupSystem:CountBuildingsOwnedBy(fallback) or 0
-						local buildingName = DoorGroupSystem:GetBuildingFromDoor(doorEnt) or "Unbekanntes Gebäude"
+                        local buildingName = DoorGroupSystem:GetBuildingFromDoor(doorEnt) or "Unbekanntes Gebäude"
                         if currentBuildingCount < DoorGroupSystem.MaxOwnBuildings then
                             doorEnt:keysUnOwn(ply)
                             doorEnt:removeKeysDoorOwner(fallback)
                             doorEnt:keysOwn(fallback)
-							DarkRP.notify(fallback, 0, 7, "Der vorherige Besitzer von '" .. buildingName .. "' hat die Verbindung getrennt.\nDu bist nun der neue Hauptbesitzer dieses Gebäudes.")
+                            DarkRP.notify(fallback, 0, 7, "Der vorherige Besitzer von '" .. buildingName .. "' hat die Verbindung getrennt.\nDu bist nun der neue Hauptbesitzer dieses Gebäudes.")
                         else
-							DarkRP.notify(fallback, 1, 7, "Der vorherige Besitzer von '" .. buildingName .. "' hat die Verbindung getrennt.\nDu hast bereits die maximale Anzahl von " .. DoorGroupSystem.MaxOwnBuildings .. " Gebäuden erreicht.")
+                            DarkRP.notify(fallback, 1, 7, "Der vorherige Besitzer von '" .. buildingName .. "' hat die Verbindung getrennt.\nDu hast bereits die maximale Anzahl von " .. DoorGroupSystem.MaxOwnBuildings .. " Gebäuden erreicht.")
                             DoorGroupSystem:SellBuilding(ply, doorEnt)
                         end
                     else
