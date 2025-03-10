@@ -1,6 +1,6 @@
 
 DoorGroupSystem = DoorGroupSystem or {}
-DoorGroupSystem.DoorFactor        = 100   -- Standard-Türfaktor, falls nicht beim erstellen gesetzt
+DoorGroupSystem.DoorFactor        = 100   -- Standard-Türfaktor, falls nicht gesetzt
 DoorGroupSystem.PropertyTaxValue  = 0.1   -- Prozentsatz für Property-Tax
 DoorGroupSystem.MaxOwnBuildings   = 3     -- Maximale Gebäude, die ein Spieler besitzen darf
 
