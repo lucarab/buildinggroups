@@ -56,7 +56,7 @@ function DoorGroupSystem:CountBuildingsOwnedBy(ply)
 end
 
 -------------------------------------------------------------------------------
--- Daten Laden & Speichern
+-- Map File Laden & Speichern
 -------------------------------------------------------------------------------
 function DoorGroupSystem:LoadBuildings()
     if not file.Exists(self.DataFile, "DATA") then
@@ -90,7 +90,7 @@ function DoorGroupSystem:SaveBuildings()
 end
 
 -------------------------------------------------------------------------------
--- Kern: Erstellen von Gebäuden, Hinzufügen von Türen, Besitz
+-- Core: Erstellen von Gebäuden, Hinzufügen von Türen, Besitz
 -------------------------------------------------------------------------------
 function DoorGroupSystem:CreateBuilding(buildingName, price, doorFactor)
     if self.Buildings[buildingName] then
@@ -158,7 +158,7 @@ function DoorGroupSystem:BroadcastBuildings()
 end
 
 -------------------------------------------------------------------------------
--- Admin-Chat-Befehle & Hilfsfunktionen
+-- Admin-Chat-Befehle
 -------------------------------------------------------------------------------
 local function requireAdmin(ply)
     if not ply:IsSuperAdmin() then
@@ -356,7 +356,7 @@ hook.Add("PlayerInitialSpawn", "DoorGroupSystem_PlayerInitSpawn", function(ply)
 end)
 
 -------------------------------------------------------------------------------
--- Überschreiben der Entity-Metatable für Türgruppenvorgänge
+-- Überschreiben der Entity-Metatable für Türvorgänge
 -------------------------------------------------------------------------------
 local ENT = FindMetaTable("Entity")
 if ENT then

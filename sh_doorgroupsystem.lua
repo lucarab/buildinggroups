@@ -5,7 +5,7 @@ DoorGroupSystem.PropertyTaxValue  = 0.1   -- Prozentsatz für Property-Tax
 DoorGroupSystem.MaxOwnBuildings   = 3     -- Maximale Gebäude, die ein Spieler besitzen darf
 
 -------------------------------------------------------------------------------
--- Gemeinsame Hilfsfunktion zur Preis-Berechnung
+-- Preis-Berechnung
 -------------------------------------------------------------------------------
 function DoorGroupSystem:CalculateBuildingPrice(buildingData)
     if not buildingData then return 0 end

@@ -51,7 +51,7 @@ local function GetBuildingData(buildingName)
 end
 
 -------------------------------------------------------------------------------
--- HUD-Überschreibung für Gebäude-Türen
+-- HUD-Überschreibung für Gebäude
 -------------------------------------------------------------------------------
 hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
     if not (IsValid(ent) and ent:isDoor()) then return end
@@ -190,7 +190,7 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
 end)
 
 -------------------------------------------------------------------------------
--- Halo-Effekt für unbesessene Gebäudetüren
+-- Halo-Effekt für unbesessene Gebäude
 -------------------------------------------------------------------------------
 local MAX_DISTANCE = 200
 hook.Add("PreDrawHalos", "DoorGroupSystem_HighlightUnownedDoors", function()
