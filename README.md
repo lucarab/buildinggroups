@@ -2,15 +2,14 @@
 
 1. [Überblick](#überblick)  
 2. [Features](#features)  
-4. [Verzeichnisstruktur](#verzeichnisstruktur)  
-5. [Admin-Befehle](#admin-befehle)  
-6. [Wie man ein Gebäude kauft/verkauft](#wie-man-ein-gebäude-kauftverkauft)  
+3. [Verzeichnisstruktur](#verzeichnisstruktur)  
+4. [Admin-Befehle](#admin-befehle)  
 
 ## Überblick
 
-Mit dem DoorGroupSystem wird das Kaufen und Verkaufen ganzer Gebäude in DarkRP einfacher und übersichtlicher. Anstelle einzelner Türen werden nun Gruppen von Türen (in einem Gebäude) zusammengefasst.
+Mit dem DoorGroupSystem wird das Kaufen und Verkaufen ganzer Gebäude in DarkRP einfacher und übersichtlicher. Anstelle einzelner Türen werden nun Gruppen von Türen (in einem Gebäude) zusammengefasst. 
 
-**Beispiel:** Wenn ein Gebäude 5 Türen besitzt, kann ein Spieler diese 5 Türen mit nur einem Kauf erwerben und ist dann gleichzeitig Besitzer aller Türen in diesem Gebäude.
+Das System erlaubt es Spielern, komplette Gebäude mit mehreren Türen auf einmal zu erwerben, anstatt jede Tür einzeln zu kaufen. Zudem bietet es eine einheitliche Verwaltung des Gebäudebesitzes, sodass keine einzelnen Türen innerhalb eines Gebäudes vergessen oder versehentlich verkauft werden können. Der Hauptbesitzer eines Gebäudes kann Mitbesitzer festlegen, die ebenfalls Zugang zu allen Türen des Gebäudes haben. Die Verwaltung der Co-Owner erfolgt wie gehabt einfach über das DarkRP-Menü oder Chat-Befehle.
 
 ## Features
 
@@ -20,6 +19,12 @@ Mit dem DoorGroupSystem wird das Kaufen und Verkaufen ganzer Gebäude in DarkRP 
 - **Optimierter HUD-Override**: Zeigt an, ob ein Gebäude gekauft, verkauft oder frei ist – inklusive Preis, Türanzahl etc.  
 - **Einfaches Hinzufügen/Löschen** von Gebäuden, Türen und Preisen via Admin-Commands (Chat-Befehle).  
 - **Konfigurierbare Preise und Steuern**: Stelle u. a. die Grundkosten, den Türfaktor und die PropertyTax ein.  
+- **Hervorhebung von ungekauften Gebäuden**: Nicht gekaufte Gebäude werden visuell hervorgehoben, um die Übersicht zu verbessern.  
+- **Serverweite Synchronisation**: Alle Spieler erhalten immer aktuelle Gebäudedaten, ohne dass ein manueller Reload notwendig ist.  
+- **Unterstützung für DarkRP Permissions**: Admins haben die volle Kontrolle über das System und können Änderungen über Chat-Befehle verwalten.  
+- **Dynamische Preisberechnung**: Preise passen sich an die Anzahl der Türen im Gebäude an, um faire Kaufpreise zu gewährleisten.  
+- **Automatische Rückerstattung bei Verkauf**: Spieler erhalten einen anteiligen Betrag zurück, wenn sie ein Gebäude verkaufen.  
+- **Flexibel erweiterbar**: Das System ist modular aufgebaut und kann leicht angepasst oder erweitert werden.  
 
 ## Verzeichnisstruktur
 
@@ -72,15 +77,3 @@ Verkauft alle Gebäude, die du besitzt (gibt 50% des Kaufpreises zurück).
 /unownalldoors
 ```
 Identisch zu `/sellalldoors` (Alias).
-
-## Wie man ein Gebäude kauft/verkauft
-
-- **Gebäude kaufen**:
-  1. Schaue auf eine Tür, die einem definierten Gebäude angehört.
-  2. Drücke **F2** (Standard DarkRP Key) → Du erhältst eine Meldung über den Gesamtpreis des Gebäudes.
-  3. Wenn du genug Geld hast, kaufst du damit alle zugehörigen Türen gleichzeitig.
-
-- **Gebäude verkaufen**:
-  1. Drücke ebenfalls **F2** auf eine Tür, die du besitzt.
-  2. Bestätige den Verkauf im Menü (oder nutze `/sellalldoors`).
-  3. Du erhältst automatisch 50 % des Kaufpreises zurück.
