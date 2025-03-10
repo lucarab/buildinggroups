@@ -456,10 +456,10 @@ hook.Add("playerBuyDoor", "DoorGroupSystem_PlayerBuyDoor", function(ply, ent)
     if not buildingData then return end
 
     if not ent:isKeysAllowedToOwn(ply) then 
-	    if DoorGroupSystem:CountBuildingsOwnedBy(ply) >= DoorGroupSystem.MaxOwnBuildings then
-		    DarkRP.notify(ply, 1, 5, "Du hast bereits die maximale Anzahl von " .. DoorGroupSystem.MaxOwnBuildings .. " Gebäuden erreicht.")
-		    return false
-	    end
+	if DoorGroupSystem:CountBuildingsOwnedBy(ply) >= DoorGroupSystem.MaxOwnBuildings then
+		DarkRP.notify(ply, 1, 5, "Du hast bereits die maximale Anzahl von " .. DoorGroupSystem.MaxOwnBuildings .. " Gebäuden erreicht.")
+		return false
+	end
     end
 
     local buildingPrice = DoorGroupSystem:CalculateBuildingPrice(buildingData)
