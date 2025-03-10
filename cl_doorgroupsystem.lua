@@ -88,7 +88,6 @@ hook.Add("HUDDrawDoorData", "CustomHUDDrawDoorData", function(ent)
     local currentY = mainY
     local bData    = GetBuildingData(bName)
 
-    -- Verwende hier die Shared-Funktion:
     local price    = bData and DoorGroupSystem:CalculateBuildingPrice(bData) or 0
     local doorCount = bData and (#(bData.doors or {}) > 0 and #bData.doors or 1) or 1
 
